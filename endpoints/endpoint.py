@@ -8,11 +8,17 @@ class Endpoint:
     url = "http://memesapi.course.qa-practice.com/"
     response = None
     json_response = None
+    token = None
 
-    def send_request(self, method="GET", endpoint="", retries=3, backoff=1, expected_status=200, **kwargs):
+    def send_request(self, method="GET", endpoint="", retries=3, backoff=1, headers=None, **kwargs):
+        headers = headers or {}
+
+        if Endpoint.token:
+            headers["Authorization"] = f'{Endpoint.token}'
+
         for attempt in range(1, retries + 1):
             try:
-                r = requests.request(method, self.url + endpoint, **kwargs)
+                r = requests.request(method, self.url + endpoint, headers=headers, **kwargs)
                 self.response = r
 
                 if 500 <= r.status_code < 600 and attempt < retries:
@@ -27,10 +33,7 @@ class Endpoint:
                         print("Ошибка: ответ не является валидным JSON!")
                 else:
                     self.json_response = None
-                    print("Ошибка: Content-Type не JSON!")
-
-                try: assert r.status_code == expected_status, f"Ожидался {expected_status}, получен {r.status_code}"
-                except AssertionError as e: print(f"[ASSERT FAILED] {e}")
+                    print("Content-Type не JSON!")
 
                 if self.json_response is not None:
                     allure.attach(
@@ -38,11 +41,6 @@ class Endpoint:
                         name="Response JSON",
                         attachment_type=allure.attachment_type.JSON
                     )
-                allure.attach(
-                    f"Status code: {r.status_code}\n\nResponse body:\n{r.text}",
-                    name="Response",
-                    attachment_type=allure.attachment_type.TEXT
-                )
                 
                 return r
 
@@ -52,3 +50,21 @@ class Endpoint:
                 else: raise
 
         raise Exception("Запрос не удался после всех retry")
+
+    def set_token_from_response(self, response):
+        try:
+            data = response.json()
+            token = data.get("token")
+            if not token:
+                raise Exception("Токен не найден в ответе!")
+            Endpoint.token = token
+            return token
+        except Exception as e:
+            raise Exception(f"Ошибка при установке токена: {e}")
+
+# endpoint = Endpoint()
+# resp = endpoint.send_request(method="POST", endpoint="/authorize", json={"name": "test"})
+# endpoint.set_token()
+
+
+
