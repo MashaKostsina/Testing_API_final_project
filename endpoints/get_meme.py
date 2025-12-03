@@ -1,9 +1,9 @@
 import allure
-from endpoints.endpoint import Endpoint
+from endpoints.baseapi import BaseAPI
 from authorization import Authorization
 
 
-class GetMeme(Endpoint):
+class GetMeme(BaseAPI):
 
     @allure.step("Get all memes")
     def get_all_memes(self):
@@ -13,10 +13,10 @@ class GetMeme(Endpoint):
     def get_meme_by_id(self, meme_id):
         return self.send_request(method="GET", endpoint=f"/meme/{meme_id}")
 
-auth = Authorization()
-auth.authorization({"name": "test"})
-print("Токен:", Endpoint.token)
-
-meme_api = GetMeme()
-all_memes = meme_api.get_all_memes()
-print(all_memes.text)
+# auth = Authorization()
+# auth.authorization({"name": "test"})
+# print("Токен:", BaseAPI.token)
+#
+# meme_api = GetMeme()
+# all_memes = meme_api.get_all_memes()
+# print(all_memes.text)

@@ -1,8 +1,8 @@
 import allure
-from endpoints.endpoint import Endpoint
+from endpoints.baseapi import BaseAPI
 
 
-class Authorization(Endpoint):
+class Authorization(BaseAPI):
     token = None
 
     @allure.step("Получение токена авторизации")
@@ -12,17 +12,9 @@ class Authorization(Endpoint):
         token = data.get("token")
         if not token:
             raise Exception("Токен не найден в ответе!")
-        Endpoint.token = token
+        BaseAPI.token = token
         return response
 
     @allure.step("Проверка жизни токена")
     def is_alive(self, token):
         return self.send_request(method="GET", endpoint=f"/authorize/{token}")
-
-# auth = Authorization()
-# resp = auth.authorization(payload={"name":"qw"})
-#
-#
-# print(resp.text)
-
-

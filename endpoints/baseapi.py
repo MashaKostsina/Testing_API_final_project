@@ -4,7 +4,8 @@ import json
 import time
 
 
-class Endpoint:
+class BaseAPI:
+
     url = "http://memesapi.course.qa-practice.com/"
     response = None
     json_response = None
@@ -13,8 +14,8 @@ class Endpoint:
     def send_request(self, method="GET", endpoint="", retries=3, backoff=1, headers=None, **kwargs):
         headers = headers or {}
 
-        if Endpoint.token:
-            headers["Authorization"] = f'{Endpoint.token}'
+        if BaseAPI.token:
+            headers["Authorization"] = f'{BaseAPI.token}'
 
         for attempt in range(1, retries + 1):
             try:
@@ -50,21 +51,3 @@ class Endpoint:
                 else: raise
 
         raise Exception("Запрос не удался после всех retry")
-
-    def set_token_from_response(self, response):
-        try:
-            data = response.json()
-            token = data.get("token")
-            if not token:
-                raise Exception("Токен не найден в ответе!")
-            Endpoint.token = token
-            return token
-        except Exception as e:
-            raise Exception(f"Ошибка при установке токена: {e}")
-
-# endpoint = Endpoint()
-# resp = endpoint.send_request(method="POST", endpoint="/authorize", json={"name": "test"})
-# endpoint.set_token()
-
-
-
