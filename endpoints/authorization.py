@@ -18,3 +18,11 @@ class Authorization(BaseAPI):
     @allure.step("Проверка жизни токена")
     def is_alive(self, token):
         return self.send_request(method="GET", endpoint=f"/authorize/{token}")
+
+
+auth = Authorization()
+print(auth.authorization({"name": "test_user"}).json())
+
+print(BaseAPI.token)
+
+print(auth.is_alive(BaseAPI.token).text)
