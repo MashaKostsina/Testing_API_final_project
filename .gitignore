@@ -208,3 +208,4 @@ __marimo__/
 __init__.py
 allure-report
 allure-results
+logs
