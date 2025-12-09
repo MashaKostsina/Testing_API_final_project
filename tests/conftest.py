@@ -80,7 +80,7 @@ def auth_token(sample_user_name):
             return BaseAPI.token
     
     logger.info("Получение нового токена авторизации...")
-    response = auth.authorization({"name": {sample_user_name}})
+    response = auth.authorization({"name": sample_user_name})
     assert response.status_code == 200, "Не удалось получить токен авторизации"
     logger.info(f"Токен успешно получен. Статус: {response.status_code}")
     return BaseAPI.token
