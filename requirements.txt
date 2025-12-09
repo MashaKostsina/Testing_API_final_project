@@ -9,3 +9,5 @@ requests>=2.32.5
 # Интеграция Allure с pytest для генерации отчетов
 allure-pytest>=2.15.2
 
+# Интеграция Allure
+allure-python-commons~=2.15.2

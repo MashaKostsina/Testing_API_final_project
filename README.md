@@ -60,13 +60,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Или установите вручную
-pip install pytest requests allure-pytest
+pip install pytest==9.0.1 requests==2.32.5 allure-pytest==2.15.2 allure-python-commons==2.15.2
 ```
 
 ### Основные зависимости:
-- `pytest` - фреймворк для тестирования
-- `requests` - библиотека для HTTP запросов
-- `allure-pytest` - интеграция Allure с pytest для генерации отчетов
+- `pytest` (9.0.1) - фреймворк для тестирования
+- `requests` (2.32.5) - библиотека для HTTP запросов
+- `allure-pytest` (2.15.2) - интеграция Allure с pytest для генерации отчетов
+- `allure-python-commons` (2.15.2) - общие компоненты для Allure
 
 **Примечание:** Логирование встроено в проект и использует стандартный модуль `logging` Python.
 

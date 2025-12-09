@@ -33,7 +33,7 @@ def test_authorization_success(auth_token, check_status_code):
 @allure.title("Проверка получения токена авторизации с пустым боди")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.tag("negative", "authorization", "validation")
-def test_authorization_empty_body(auth_token, check_status_code):
+def test_authorization_empty_body(check_status_code):
     auth = Authorization()
     response = auth.send_request("POST", "/authorize", json={})
     check_status_code(response, 400)
@@ -45,7 +45,7 @@ def test_authorization_empty_body(auth_token, check_status_code):
 @allure.title("Проверка получения токена авторизации с пустым именем")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.tag("negative", "authorization", "validation")
-def test_authorization_empty_name(auth_token, check_status_code):
+def test_authorization_empty_name(check_status_code):
     auth = Authorization()
     response = auth.send_request("POST", "/authorize", json={"name": ""})
     check_status_code(response, 400)
@@ -58,7 +58,7 @@ def test_authorization_empty_name(auth_token, check_status_code):
 @allure.title("Проверка получения токена авторизации, используя разные типы данных для значения")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.tag("negative", "authorization", "validation", "data_types")
-def test_authorization_different_types_values(auth_token, value, check_status_code):
+def test_authorization_different_types_values(value, check_status_code):
     auth = Authorization()
     response = auth.send_request("POST", "/authorize", json={"name": value})
     check_status_code(response, 400)
@@ -70,7 +70,7 @@ def test_authorization_different_types_values(auth_token, value, check_status_co
 @allure.title("Проверка получения токена авторизации с дополнительным ключом")
 @allure.severity(allure.severity_level.MINOR)
 @allure.tag("negative", "authorization", "validation")
-def test_authorization_additional_key(auth_token, check_status_code):
+def test_authorization_additional_key(check_status_code):
     auth = Authorization()
     response = auth.send_request("POST", "/authorize", json={"name": "test_user", "test": "test"})
     check_status_code(response, 400)
@@ -82,7 +82,7 @@ def test_authorization_additional_key(auth_token, check_status_code):
 @allure.title("Проверка получения токена авторизации с невалидным названием ключа")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.tag("negative", "authorization", "validation")
-def test_authorization_invalid_key_name(auth_token, check_status_code):
+def test_authorization_invalid_key_name(check_status_code):
     auth = Authorization()
     response = auth.send_request("POST", "/authorize", json={"test": "test_user"})
     check_status_code(response, 400)
@@ -94,7 +94,7 @@ def test_authorization_invalid_key_name(auth_token, check_status_code):
 @allure.title("Проверка получения токена авторизации с невалидным эндпоинтом")
 @allure.severity(allure.severity_level.MINOR)
 @allure.tag("negative", "authorization", "endpoint")
-def test_authorization_invalid_endpoint(auth_token, check_status_code):
+def test_authorization_invalid_endpoint(check_status_code):
     auth = Authorization()
     response = auth.send_request("POST", "/Authorize", json={"name": "test_user"})
     check_status_code(response, 404)
@@ -107,7 +107,7 @@ def test_authorization_invalid_endpoint(auth_token, check_status_code):
 @allure.title("Проверка получения токена авторизации с невалидным методом")
 @allure.severity(allure.severity_level.MINOR)
 @allure.tag("negative", "authorization", "method")
-def test_authorization_invalid_method(auth_token, r_method, check_status_code):
+def test_authorization_invalid_method(r_method, check_status_code):
     auth = Authorization()
     response = auth.send_request(r_method, "/authorize", json={"name": "test_user"})
     check_status_code(response, 405)
@@ -137,7 +137,7 @@ def test_token_is_alive(auth_token, sample_user_name, check_status_code):
 @allure.title("Проверка валидности токена с невалидным методом")
 @allure.severity(allure.severity_level.MINOR)
 @allure.tag("negative", "authorization", "method")
-def test_token_is_alive_invalid_method(auth_token, sample_user_name, r_method, check_status_code):
+def test_token_is_alive_invalid_method(sample_user_name, r_method, check_status_code):
     auth = Authorization()
     token = BaseAPI.token
     response = auth.send_request(r_method, endpoint=f"/authorize/{token}")
@@ -150,7 +150,7 @@ def test_token_is_alive_invalid_method(auth_token, sample_user_name, r_method, c
 @allure.title("Проверка валидности токена с невалидным эндпоинтом")
 @allure.severity(allure.severity_level.MINOR)
 @allure.tag("negative", "authorization", "endpoint")
-def test_token_is_alive_invalid_endpoint(auth_token, sample_user_name, check_status_code):
+def test_token_is_alive_invalid_endpoint(sample_user_name, check_status_code):
     auth = Authorization()
     token = BaseAPI.token
     response = auth.send_request("GET", endpoint=f"/Authorize/{token}")
@@ -164,7 +164,7 @@ def test_token_is_alive_invalid_endpoint(auth_token, sample_user_name, check_sta
 @allure.title("Проверка валидности токена с невалидным токеном")
 @allure.severity(allure.severity_level.NORMAL)
 @allure.tag("negative", "authorization", "validation")
-def test_token_is_alive_invalid_token(auth_token, value, sample_user_name, check_status_code):
+def test_token_is_alive_invalid_token(value, sample_user_name, check_status_code):
     auth = Authorization()
     response = auth.send_request("GET", endpoint=f"/authorize/{value}")
     check_status_code(response, 404)
